@@ -5,7 +5,9 @@
  */
 
 // TO IMPORT: const responseGenerator = require('./response-generator');
+const { StatusCodes } = require('http-status-codes');
 const constant = require('./constant');
+const { errList } = require('./error');
 
 //
 // My Error Response JSON Object:
@@ -190,6 +192,58 @@ function success(resKind, resDescription, resItems) {
   };
 }
 
+/**
+ * Generate Success response for front end
+ *
+ * @param {string} resKind
+ * @param {string} resDescription
+ * @param {array} resItems
+ */
+const respondSuccess = (res) => (resKind, resDescription, resItems) => {
+  return res.status(StatusCodes.OK).send({
+    data: {
+      kind: resKind,
+      description: resDescription,
+      items: resItems,
+    },
+  });
+};
+
+/**
+ * Convert database error object into error response.
+ * Error objects are defined into model/error.js file.
+ *
+ * @param errListObj database Error Object from error.js file
+ */
+const respondDBError =
+  (res, status = StatusCodes.BAD_REQUEST) =>
+  (ERROR) => {
+    const errListObj = errList.dbError[ERROR];
+    return res.status(status).send({
+      type: constant.errType.DB_ERROR,
+      code: errListObj.code,
+      message: errListObj.message,
+      errors: [],
+    });
+  };
+
+/**
+ * Convert internal error object into error response.
+ * Error objects are defined into model/error.js file.
+ *
+ * @param errListObj Internal Error Object from error.js file
+ */
+const respondInternalError =
+  (res, status = StatusCodes.INTERNAL_SERVER_ERROR) =>
+  (ERROR) => {
+    const errListObj = errList.internalError[ERROR];
+    return res.status(status).send({
+      type: constant.errType.INTERNAL_ERROR,
+      code: errListObj.code,
+      message: errListObj.message,
+      errors: [],
+    });
+  };
 // EXPORTING FUNCTIONALITY
 
 module.exports.errorResponse = errorResponse;
@@ -200,3 +254,6 @@ module.exports.validationError = validationError;
 module.exports.authError = authError;
 
 module.exports.success = success;
+module.exports.respondSuccess = respondSuccess;
+module.exports.respondDBError = respondDBError;
+module.exports.respondInternalError = respondInternalError;

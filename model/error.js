@@ -213,10 +213,39 @@ const errList = {
       message: `You are not authorized to access this resource, please login again`,
       internalDescription: 'when user selects branch list, its a branch mismatch',
     },
-
     ERR_RESTAURANT_CATEGORY_NAME_CHECK_NOT_AVAILABLE: {
       code: '30030',
       message: 'A category with the given name already exists, Please check and proceed.!',
+      internalDescription: 'Employee with the given username already exists',
+    },
+    ERR_TRANSACTION_CAN_NOT_BE_UPDATED: {
+      code: '30031',
+      message: 'This transaction can not be updated, already updated max number of times or can not be updated.!',
+      internalDescription: 'Employee with the given username already exists',
+    },
+    ERR_TRANSACTION_CAN_NOT_BE_DELETED: {
+      code: '30032',
+      message: 'This transaction can not be deleted.!',
+      internalDescription: 'Employee with the given username already exists',
+    },
+    ERR_TRANSACTION_CAN_NOT_BE_ADDED_TO_LEDGER: {
+      code: '30033',
+      message: 'This transaction can not be added to ledger, ledger does not exist.!',
+      internalDescription: 'Employee with the given username already exists',
+    },
+    ERR_TRANSACTION_CAN_NOT_BE_ADDED_TO_CLOSED_LEDGER: {
+      code: '30034',
+      message: 'This transaction can not be added to ledger, ledger have been closed.!',
+      internalDescription: 'Employee with the given username already exists',
+    },
+    ERR_TRANSACTION_CAN_NOT_BE_ADDED_TO_LENDING: {
+      code: '30033',
+      message: 'This transaction can not be added to lending, lending does not exist.!',
+      internalDescription: 'Employee with the given username already exists',
+    },
+    ERR_TRANSACTION_CAN_NOT_BE_ADDED_TO_CLOSED_LENDING: {
+      code: '30034',
+      message: 'This transaction can not be added to lending, lending have been settled.!',
       internalDescription: 'Employee with the given username already exists',
     },
   }, // End of DB error Array
@@ -567,6 +596,26 @@ const errList = {
       code: '50066',
       message: errMsg.INTERNAL_SERVER_ERROR,
       internalDescription: 'The select query to select the category for validation details throws an error',
+    },
+    ERR_LEDGER_TRANSACTION_ADD_FAILURE: {
+      code: '50067',
+      message: errMsg.INTERNAL_SERVER_ERROR,
+      internalDescription: 'The insert query to insert the city failed',
+    },
+    ERR_TRANSACTION_ROLLBACK_FAILURE: {
+      code: '50068',
+      message: errMsg.INTERNAL_SERVER_ERROR,
+      internalDescription: 'Begin Transaction connection failure',
+    },
+    ERR_TRANSACTION_COMMIT_FAILURE: {
+      code: '50069',
+      message: errMsg.INTERNAL_SERVER_ERROR,
+      internalDescription: 'Begin Transaction connection failure',
+    },
+    ERR_TRANSACTION_SELECT_LIST_FAILURE: {
+      code: '50070',
+      message: errMsg.INTERNAL_SERVER_ERROR,
+      internalDescription: 'while selecting restaurants list there is an error in selection',
     },
   }, // End of Internal Error Array
 };

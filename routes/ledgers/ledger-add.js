@@ -1,35 +1,37 @@
 const express = require('express');
-const db = require('./db-lendings');
+const db = require('./db-ledgers');
 const pool = require('../../database/db');
 const { errList } = require('../../model/error');
 const RG = require('../../model/response-generator');
-const { paramLendingIdValidation } = require('./validations');
+const { addLedger } = require('./validations');
 
 const router = express.Router();
 
 // eslint-disable-next-line arrow-parens
-const routeName = (str) => `*** lending-details ${str ? `|| ${str}` : ''} ***`;
+const routeName = (str) => `*** ledger-add ${str ? `|| ${str}` : ''} ***`;
 
 /**
  *
- * @api {GET} /lending/:lending_id lending details
- * @apiName lending details
- * @apiGroup lending
+ * @api {POST} /ledgers Transactions add
+ * @apiName Transactions add
+ * @apiGroup Transactions
  * @apiVersion 0.0.1
  * @apiPermission none
  *
  * @apiHeader {String} x-id-token Employee login authentication token
  *
- * @apiParam {String} lending_id lending Id
+ * @apiBody {String} purpose Purpose of ledger
+ * @apiBody {String} description Detailed description of ledger
+ * @apiBody {String} category Category of ledger
  *
- * @apiSampleRequest /lending/:lending_id
+ * @apiSampleRequest /ledgers
  */
-router.get('/:id', paramLendingIdValidation, async (req, res) => {
+router.post('/', addLedger, async (req, res) => {
   const log = req.logger;
   log.info(routeName('Execution Started'));
   try {
-    const [rows] = await db.lendingDetails(log, pool, req.user, req.params.id);
-    return res.status(200).send(RG.success('lending details', 'lending details Successfully retrieved!!!', rows));
+    await db.addLedger(log, pool, req.user, req.body);
+    return res.status(200).send(RG.success('Ledger added', 'Ledger added successfully!!!', [req.body]));
   } catch (e) {
     log.error({ msg: routeName('Error'), err: e });
     const generateToken = RG.internalError(errList.internalError.ERR_LOGIN_TOKEN_GENERATION_ERROR);

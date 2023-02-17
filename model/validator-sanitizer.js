@@ -115,6 +115,19 @@ function isMobile(location, mobileNumber) {
 }
 
 /**
+ * Mobile Phone validator for Indian locale
+ *
+ * @param location
+ * @param field
+ *
+ * @returns validation chain object of express-validator
+ */
+function isArray(location, field) {
+  const validator = getFunctionName(location);
+  return validator(field).isArray().withMessage('Please provide valid items.');
+}
+
+/**
  * If field exist then validates whether the mobile number is valid or not
  *
  * @param location
@@ -130,7 +143,7 @@ function ifExistIsMobile(location, field) {
         return true;
       }
       validatorLibrary.trim(paramField);
-      if (validatorLibrary.isMobilePhone(paramField, 'en-IN')) {
+      if (validatorLibrary.isMobilePhone(paramField)) {
         return true;
       }
       return false;
@@ -1216,6 +1229,7 @@ module.exports.isValidTransactionType = isValidTransactionType;
 module.exports.isAmount = isAmount;
 module.exports.isUsername = isUsername;
 module.exports.isPINCODE = isPINCODE;
+module.exports.isArray = isArray;
 module.exports.isValidAdminRole = isValidAdminRole;
 module.exports.isValidEmployeeRole = isValidEmployeeRole;
 module.exports.ifExistIsPINCODE = ifExistIsPINCODE;

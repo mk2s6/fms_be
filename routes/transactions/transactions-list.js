@@ -3,6 +3,7 @@ const db = require('./db-transactions');
 const pool = require('../../database/db');
 const { errList } = require('../../model/error');
 const RG = require('../../model/response-generator');
+const { paginationValidation } = require('../../utils/common-validations/common-validations');
 
 const router = express.Router();
 
@@ -19,7 +20,7 @@ const routeName = (str) => `*** transactions-list ${str ? `|| ${str}` : ''} ***`
  *
  * @apiSampleRequest /transactions
  */
-router.get('/', async (req, res) => {
+router.get('/', paginationValidation, async (req, res) => {
   const log = req.logger;
   log.info(routeName('Execution Started'));
   try {

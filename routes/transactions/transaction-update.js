@@ -3,22 +3,24 @@ const db = require('./db-transactions');
 const pool = require('../../database/db');
 const { errList } = require('../../model/error');
 const RG = require('../../model/response-generator');
-const { addTransaction } = require('./validations');
+const { addTransaction, paramTransactionIdValidation } = require('./validations');
 
 const router = express.Router();
 
 // eslint-disable-next-line arrow-parens
-const routeName = (str) => `*** transaction-add ${str ? `|| ${str}` : ''} ***`;
+const routeName = (str) => `*** transaction-delete ${str ? `|| ${str}` : ''} ***`;
 
 /**
  *
- * @api {POST} /transactions Transactions add
- * @apiName Transactions add
+ * @api {PUT} /transactions/:transaction_id Transactions delete
+ * @apiName Transactions delete
  * @apiGroup Transactions
  * @apiVersion 0.0.1
  * @apiPermission none
  *
  * @apiHeader {String} x-id-token Employee login authentication token
+ *
+ * @apiParam {string} transaction_id Transaction id
  *
  * @apiBody {String} purpose Purpose of transaction
  * @apiBody {String} description Detailed description of transaction
@@ -28,16 +30,18 @@ const routeName = (str) => `*** transaction-add ${str ? `|| ${str}` : ''} ***`;
  * @apiBody {String} date transaction date
  * @apiBody {Number} amount Transaction Amount
  *
- * @apiSampleRequest /transactions
+ * @apiSampleRequest /transactions/:transaction_id
  */
-router.post('/', addTransaction, async (req, res) => {
+router.put('/:id', addTransaction, paramTransactionIdValidation, async (req, res) => {
   const log = req.logger;
   log.info(routeName('Execution Started'));
   try {
-    const [rows] = await db.addTransaction(log, pool, req.user, req.body);
-    return res.status(200).send(RG.success('Transactions added', 'Transactions added successfully!!!', [req.body]));
+    await db.transactionUpdateStatus(log, pool, req.user, req.params.id);
+    await db.updateTransaction(log, pool, req.user, { ...req.body, id: req.params.id });
+    return res.status(200).send(RG.success('Transactions update', 'Transactions updated Successfully!!!', [req.body]));
   } catch (e) {
     log.error({ msg: routeName('Error'), err: e });
+    if (!isNaN(e.type)) return res.status(400).send(e);
     const generateToken = RG.internalError(errList.internalError.ERR_LOGIN_TOKEN_GENERATION_ERROR);
     return res.status(400).send(generateToken);
   }

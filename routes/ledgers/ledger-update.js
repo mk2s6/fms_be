@@ -3,33 +3,35 @@ const db = require('./db-ledgers');
 const pool = require('../../database/db');
 const { errList } = require('../../model/error');
 const RG = require('../../model/response-generator');
-const { paramLedgerIdValidation } = require('./validations');
+const { addLedger, paramLedgerIdValidation } = require('./validations');
 
 const router = express.Router();
 
 // eslint-disable-next-line arrow-parens
-const routeName = (str) => `*** ledgers-details ${str ? `|| ${str}` : ''} ***`;
+const routeName = (str) => `*** ledger-update ${str ? `|| ${str}` : ''} ***`;
 
 /**
  *
- * @api {GET} /ledgers/:ledger_id Ledgers details
- * @apiName Ledgers details
- * @apiGroup Ledgers
+ * @api {POST} /ledgers Transactions update
+ * @apiName Transactions update
+ * @apiGroup Transactions
  * @apiVersion 0.0.1
  * @apiPermission none
  *
  * @apiHeader {String} x-id-token Employee login authentication token
  *
- * @apiParam {String} ledger_id Ledgers Id
+ * @apiBody {String} purpose Purpose of ledger
+ * @apiBody {String} description Detailed description of ledger
+ * @apiBody {String} category Category of ledger
  *
- * @apiSampleRequest /ledgers/:ledger_id
+ * @apiSampleRequest /ledgers
  */
-router.get('/:id', paramLedgerIdValidation, async (req, res) => {
+router.post('/', addLedger, paramLedgerIdValidation, async (req, res) => {
   const log = req.logger;
   log.info(routeName('Execution Started'));
   try {
-    const [rows] = await db.ledgerDetails(log, pool, req.user, req.params.id);
-    return res.status(200).send(RG.success('Ledgers list', 'Ledgers list Successfully retrieved!!!', rows));
+    await db.updateLedger(log, pool, req.user, { ...req.body, id: req.params.id });
+    return res.status(200).send(RG.success('Ledger updated', 'Ledger updated successfully!!!', [req.body]));
   } catch (e) {
     log.error({ msg: routeName('Error'), err: e });
     const generateToken = RG.internalError(errList.internalError.ERR_LOGIN_TOKEN_GENERATION_ERROR);

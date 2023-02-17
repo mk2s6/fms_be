@@ -1,17 +1,17 @@
 // =============================================
 // ENVIRONMENT and CONFIGURATION SETTINGS
 // =============================================
-process.setMaxListeners(1000);
 const config = require('config');
+const { logger, basicLogger } = require('./model/loggingV2');
 
 // Check configuration settings
 if (config.get('environment') === 'default') {
-  console.log('Please set the NODE_ENV to a valid values (development/production/testing/staging).');
+  basicLogger.info('Please set the NODE_ENV to a valid values (development/production/testing/staging).');
   process.exit(1);
 }
 
 if (config.get('environment') !== 'test') {
-  console.log(`Your Application environment: ${config.get('environment')}`);
+  basicLogger.info(`Your Application environment: ${config.get('environment')}`);
   // console.log(`Your Application TimeZone: ${process.env.TZ}`);
 }
 
@@ -27,13 +27,6 @@ const moment = require('moment');
 const shortid = require('shortid');
 const RG = require('./model/response-generator');
 const constant = require('./model/constant');
-// const { logger, routeLogging } = require('./model/logger');
-const { logger, basicLogger } = require('./model/loggingV2');
-// const auth = require('./model/auth');
-// const hf = require('./model/helper-function');
-// const error = require('./model/error');
-
-// const passport = require('passport');
 
 /**
  * Require for Routing

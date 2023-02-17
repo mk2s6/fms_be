@@ -14,4 +14,9 @@ module.exports = {
     vs.isValidPastDateTodayAllowed('body', 'date'),
     vs.returnValidations(VALIDATIONS_FOR, 'Add Transaction'),
   ],
+
+  paramTransactionIdValidation: [
+    vs.isNumeric('params', 'id', 'Please choose a valid transaction to delete.'),
+    vs.returnValidations(VALIDATIONS_FOR, 'Transaction ID Parameter '),
+  ],
 };
