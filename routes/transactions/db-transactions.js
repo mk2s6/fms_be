@@ -33,22 +33,21 @@ async function transactionsList(log, pool, user, filters) {
     const sqlParams = [user.id, 0];
 
     if (Object.keys(filters).length > 2) {
-      let sqlFilterQuery = `
-            `;
+      let sqlFilterQuery = ` `;
 
       if ('ledger_id' in filters) {
-        sqlFilterQuery += `AND trans_ledger_id = ?`;
+        sqlFilterQuery += ` AND trans_ledger_id = ?`;
         sqlParams.push(filters.ledger_id);
       }
 
       if ('lending_id' in filters) {
-        sqlFilterQuery += `AND trans_lending_id = ?`;
+        sqlFilterQuery += ` AND trans_lending_id = ?`;
         sqlParams.push(filters.lending_id);
       }
 
-      if ('parent_trans_id' in filters) {
-        sqlFilterQuery += `AND trans_parent_trans_id = ?`;
-        sqlParams.push(filters.trans_parent_trans_id);
+      if ('parent_transaction' in filters) {
+        sqlFilterQuery += ` AND trans_parent_trans_id = ?`;
+        sqlParams.push(filters.parent_transaction);
       }
 
       sqlSelectQuery += sqlFilterQuery;
