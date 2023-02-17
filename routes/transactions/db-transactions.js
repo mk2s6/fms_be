@@ -35,14 +35,14 @@ async function transactionsList(log, pool, user, filters) {
     if (Object.keys(filters).length > 2) {
       let sqlFilterQuery = ` `;
 
-      if ('ledger_id' in filters) {
+      if ('ledger' in filters) {
         sqlFilterQuery += ` AND trans_ledger_id = ?`;
-        sqlParams.push(filters.ledger_id);
+        sqlParams.push(filters.ledger);
       }
 
-      if ('lending_id' in filters) {
+      if ('lending' in filters) {
         sqlFilterQuery += ` AND trans_lending_id = ?`;
-        sqlParams.push(filters.lending_id);
+        sqlParams.push(filters.lending);
       }
 
       if ('parent_transaction' in filters) {
