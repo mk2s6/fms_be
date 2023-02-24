@@ -15,9 +15,9 @@ async function transactionsList(log, pool, user, filters) {
   try {
     let sqlSelectQuery = `
         SELECT
-                trans_id AS id, trans_user_id AS userId, trans_purpose AS transactionPurpose,
-                trans_description AS transactionDescription, trans_currency_code AS currencyCode, trans_type AS transactionType,
-                trans_value AS transactionValue, trans_mode AS transactionModes, trans_made_on AS transactionDate
+                trans_id AS id, trans_purpose AS purpose,
+                trans_currency_code AS currencyCode, trans_type AS type, trans_category AS category,
+                trans_value AS value, trans_mode AS mode, trans_made_on AS date
         FROM transactions
         WHERE trans_user_id = ? AND trans_is_deleted = ? `;
 
@@ -91,21 +91,9 @@ async function transactionDetails(log, pool, user, trans_id) {
   log.info(functionName('transactionDetails'));
   return pool.execute(
     `SELECT
-                trans_id AS id, trans_user_id AS userId, trans_purpose AS transactionPurpose,
-                trans_description AS transactionDescription, trans_currency_code AS currencyCode, trans_type AS transactionType,
-                trans_value AS transactionValue, trans_mode AS transactionModes, trans_made_on AS transactionDate
-   FROM transactions WHERE trans_id = ? AND trans_user_id = ? AND trans_is_deleted = ?;`,
-    [trans_id, user.id, 0],
-  );
-}
-
-async function transactionDetails(log, pool, user, trans_id) {
-  log.info(functionName('transactionDetails'));
-  return pool.execute(
-    `SELECT
-                trans_id AS id, trans_user_id AS userId, trans_purpose AS transactionPurpose,
-                trans_description AS transactionDescription, trans_currency_code AS currencyCode, trans_type AS transactionType,
-                trans_value AS transactionValue, trans_mode AS transactionModes, trans_made_on AS transactionDate
+                trans_id AS id, trans_purpose AS purpose, trans_category AS category,
+                trans_description AS description, trans_currency_code AS currencyCode, trans_type AS type,
+                trans_value AS value, trans_mode AS mode, trans_made_on AS date
    FROM transactions WHERE trans_id = ? AND trans_user_id = ? AND trans_is_deleted = ?;`,
     [trans_id, user.id, 0],
   );
@@ -142,7 +130,7 @@ async function addTransaction(log, pool, user, { purpose, description, category,
 }
 
 async function transactionUpdateStatus(log, pool, user, trans_id) {
-  log.info(functionName('transactionDetails'));
+  log.info(functionName('transactionUpdateStatus'));
   const [counts] = await pool.execute(
     `
       SELECT COUNT(*) AS transactionCount

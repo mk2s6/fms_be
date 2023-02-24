@@ -33,7 +33,7 @@ router.patch('', usernameCheck, async (req, res) => {
   log.info(routeName());
 
   try {
-    const [rows] = await db.checkUsername(log, pool, req.body, req.user);
+    const [rows] = await db.checkUsername(log, pool, req.body, { ...req.user });
     log.verbose(routeName('Rows Count'), { data: rows });
     if (rows[0].count) {
       log.error(routeName('Users User name check'), { data: rows[0] });

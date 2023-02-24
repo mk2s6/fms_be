@@ -50,7 +50,7 @@ const getUserProfileDetails = async (log, pool, { id }) => {
   return pool.execute(sqlQuery, sqlParams);
 };
 
-const checkUsername = async (log, pool, { username }, { id, resId }) => {
+const checkUsername = async (log, pool, { username }, { id = 0 }) => {
   log.info({ msg: functionName('checkUsername') });
   const sqlQuery = `
             SELECT count(*) AS count FROM users

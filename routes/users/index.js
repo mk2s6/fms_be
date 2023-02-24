@@ -12,9 +12,9 @@ const router = express.Router();
 
 router.use('/login', login);
 router.use('/register', userRegister);
+router.use('/username', userUsernameCheck);
 router.use('/logout', protectUserRoute, logout);
 router.use('/my/profile', protectUserRoute, profile);
-router.use('/username', protectUserRoute, userUsernameCheck);
 router.use('/my/password', protectUserRoute, userSetPassword);
 router.use('/my/username', protectUserRoute, userSetUsername);
 
