@@ -6,6 +6,7 @@ const appModules = require('./modules');
 const transactionModule = require('./transactions');
 const ledgerModule = require('./ledgers');
 const lendingModule = require('./lendings');
+const paymentMethodsModule = require('./payment-methods');
 
 const router = express.Router();
 
@@ -20,5 +21,6 @@ router.use('/app/modules', appModules);
 router.use('/transactions', transactionModule);
 router.use('/ledgers', ledgerModule);
 router.use('/lendings', lendingModule);
+router.use('/payment-methods', paymentMethodsModule);
 
 module.exports = router;

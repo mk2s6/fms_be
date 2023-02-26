@@ -92,15 +92,14 @@ app.use(cookieParser());
 
 app.use((req, res, next) => {
   const log = req.logger;
+  log.info('Execution Started');
   process.on('unhandledRejection', function (err) {
     log.warn({ msg: '*** app | unhandledRejection ***', err });
     return res.send(RG.internalError(errList.internalError.ERR_INSERT_USER_INSERT_FAILURE));
-    process.exit(1);
   });
   process.on('unhandledException', function (err, req, res) {
     log.warn({ msg: '*** app | unhandledRejection ***', err });
     return res.send(RG.internalError(errList.internalError.ERR_GLOBAL_UNHANDLED_EXCEPTION));
-    process.exit(1);
   });
   next();
 });
