@@ -7,7 +7,7 @@ async function paymentMethodsList(log, pool, user, filters) {
 
   return pool.execute(
     `SELECT
-          pm_id AS id, pm_type AS type, pm_name AS name, pm_last_4_digits AS last4digits,
+          pm_id AS id, pm_type AS type, pm_name AS name, pm_last_4_digits AS last4Digits,
           pm_is_active AS active, pm_is_deleted AS isDeleted
       FROM payment_methods
       WHERE pm_user_id = ?
@@ -40,4 +40,14 @@ async function addPaymentMethod(log, pool, user, { name, type, last4Digits }) {
   );
 }
 
-module.exports = { paymentMethodsList, paymentMethodDetails, addPaymentMethod };
+async function updatePaymentMethod(log, pool, user, { name, type, last4Digits, id }) {
+  log.info(functionName('updatePaymentMethod'));
+
+  return pool.execute(
+    `UPDATE payment_methods SET pm_name = ?, pm_type = ?, pm_last_4_digits = ?
+     WHERE pm_id = ? AND pm_user_id = ?`,
+    [name, type, last4Digits, id, user.id],
+  );
+}
+
+module.exports = { paymentMethodsList, paymentMethodDetails, addPaymentMethod, updatePaymentMethod };
