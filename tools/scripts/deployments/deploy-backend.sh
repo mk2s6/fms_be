@@ -3,14 +3,13 @@
 cd /var/app/fms_be/
 
 echo "Pulling code from GIT ..."
+git stash
 git pull
-
+git stash pop
 echo "Pulling code from GIT Successful..."
 
 
 read -p "Do you want to Recreate-DB, If yes please give Y/y else please provide any key? - " recreate
-
-echo "$recreate-"
 
 if [ "$recreate" = "Y" ] || [ "$recreate" = "y" ]
 then
