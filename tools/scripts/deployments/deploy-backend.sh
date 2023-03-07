@@ -22,9 +22,9 @@ cd /var/app/fms_be/
 
 echo "Running Migrations..."
 
-db-migrate up -e dev
-db-migrate up:data -e dev
-db-migrate up:tests -e dev
+db-migrate up
+db-migrate up:data
+db-migrate up:tests
 
 echo "Running Migrations successful..."
 
