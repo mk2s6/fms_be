@@ -8,22 +8,24 @@ git pull
 echo "Pulling code from GIT Successful..."
 
 
-read -p "Do you want to Recreate-DB, If yes please give Y/y else please provide any key? - " recerate
+read -p "Do you want to Recreate-DB, If yes please give Y/y else please provide any key? - " recreate
 
-if [ $recreate -eq "Y" -o $recreate -eq "y"]:
+echo "$recreate-"
+
+if [ "$recreate" = "Y" ] || [ "$recreate" = "y" ]
 then
-echo "Recreating database"
-cd /var/app/fms_be/tools/scripts/deplyments/
-bash ./drop-and-create-db.sh
+    echo "Recreating database"
+    cd /var/app/fms_be/tools/scripts/deployments/
+    bash ./drop-and-create-db.sh
 fi
 
 cd /var/app/fms_be/
 
 echo "Running Migrations..."
 
-db-migrate up
-db-migrate up:data
-db-migrate up:tests
+db-migrate up -e dev
+db-migrate up:data -e dev
+db-migrate up:tests -e dev
 
 echo "Running Migrations successful..."
 
