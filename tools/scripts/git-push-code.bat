@@ -12,3 +12,11 @@ git commit -m "Added more features"
 git push
 ECHO "GIT PUSHED BACKEND"
 
+cd ../fms_fe
+
+ECHO "GIT COMMIT FRONT END"
+git add .
+git commit -m "Added more features"
+git push
+ECHO "GIT PUSHED FRONT END"
+

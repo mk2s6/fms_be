@@ -51,10 +51,10 @@ async function updatePaymentMethod(log, pool, user, { name, type, last4Digits, i
 }
 
 async function togglePaymentMethodStatus(log, pool, user, status, id) {
-  log.info(functionName('updatePaymentMethod'));
+  log.info(functionName('togglePaymentMethodStatus'));
 
   return pool.execute(
-    `UPDATE payment_methods SET pm_active = ?
+    `UPDATE payment_methods SET pm_is_active = ?
      WHERE pm_id = ? AND pm_user_id = ?`,
     [status, id, user.id],
   );
