@@ -1,4 +1,4 @@
-@REM @ECHO OFF
+@ECHO OFF
 
 ECHO "EXPORT DATABASE"
 cd ..\\..\\
@@ -14,7 +14,7 @@ ECHO "GIT PUSHED BACKEND"
 
 
 ECHO "GIT COMMIT FRONT-END"
-cd ../fms_fe
+cd ..\\fms_fe
 
 git add .
 git commit -m "Added more features"

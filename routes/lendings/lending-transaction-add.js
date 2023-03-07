@@ -21,6 +21,8 @@ const routeName = (str) => `*** ledger-transaction-add ${str ? `|| ${str}` : ''}
  *
  * @apiHeader {String} x-id-token Employee login authentication token
  *
+ * @apiParam {String} lending_id Lending id to which we are adding the transaction
+ *
  * @apiBody {String} purpose Purpose of ledger
  * @apiBody {String} description Detailed description of ledger
  * @apiBody {String} category Category of ledger

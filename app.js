@@ -46,8 +46,8 @@ app.use(async (req, res, next) => {
   req.logger_id = loggerId;
   res.setHeader('logger_id', loggerId);
   res.setHeader('request_id', reqId);
-  req.hostname = req.headers.host;
-  req.logger_meta = { loggerId, url: req.url, method: req.method, requestId: reqId, host: req.hostname, reqIP: req.ip };
+  req.hostname = req.headers.origin;
+  req.logger_meta = { loggerId, url: req.url, method: req.method, requestId: reqId, host: req.hostname, reqIP: req.headers['x-real-ip'] };
   req.logger = logger(req.logger_meta);
   next();
 });

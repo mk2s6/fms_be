@@ -5,7 +5,7 @@
     "port": "3306",
     "user": "root",
     "password": "kusumanjali21",
-    "database": "mk2s_hotel",
+    "database": "mk2s_fms",
     "multipleStatements": true
   },
   "staging": {

@@ -50,4 +50,14 @@ async function updatePaymentMethod(log, pool, user, { name, type, last4Digits, i
   );
 }
 
-module.exports = { paymentMethodsList, paymentMethodDetails, addPaymentMethod, updatePaymentMethod };
+async function togglePaymentMethodStatus(log, pool, user, status, id) {
+  log.info(functionName('updatePaymentMethod'));
+
+  return pool.execute(
+    `UPDATE payment_methods SET pm_active = ?
+     WHERE pm_id = ? AND pm_user_id = ?`,
+    [status, id, user.id],
+  );
+}
+
+module.exports = { paymentMethodsList, paymentMethodDetails, addPaymentMethod, updatePaymentMethod, togglePaymentMethodStatus };
