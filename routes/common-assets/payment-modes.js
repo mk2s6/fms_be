@@ -10,7 +10,7 @@ const routeName = (str) => `*** payment-modes ${str ? `|| ${str}` : ''}***`;
 
 /**
  *
- * @api {get} assets/commons/payment/modes Get payment modes list
+ * @api {get} assets/commons/transaction-modes Get payment modes list
  * @apiName Get payment modes list
  * @apiGroup Common Assets
  * @apiVersion 0.0.1
@@ -40,7 +40,7 @@ const routeName = (str) => `*** payment-modes ${str ? `|| ${str}` : ''}***`;
  *     "errors": []
  * }
  *
- * @apiSampleRequest /assets/commons/payment/modes
+ * @apiSampleRequest /assets/commons/transaction-modes
  */
 router.get('', async (req, res) => {
   const log = req.logger;

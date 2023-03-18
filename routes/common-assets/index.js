@@ -13,7 +13,7 @@ router.use('/countries', countrySelect);
 router.use('/states', stateSelect);
 router.use('/cities', citySelect);
 router.use('/currency-codes', currencyCodesSelect);
-router.use('/payment/modes', paymentModes);
+router.use('/transaction-modes', paymentModes);
 router.use('/transaction-categories', transactionCategories);
 // router.use('/', create);
 
