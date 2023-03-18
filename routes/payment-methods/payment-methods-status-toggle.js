@@ -19,6 +19,8 @@ const routeName = (str) => `*** payment-methods-status-toggle ${str ? `|| ${str}
  *
  * @apiHeader {String} x-id-token Employee login authentication token
  *
+ * @apiParam {string} id Id of the payment method you need to toggle
+ *
  * @apiSampleRequest /payment-methods/:id/status
  */
 router.put('/:id/status', paramPMIdValidation, async (req, res) => {
