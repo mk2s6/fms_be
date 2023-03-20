@@ -8,6 +8,7 @@ git pull
 echo "Pulling code from GIT Successful..."
 
 echo "Running BUILD..."
+npm i
 npm run build
 echo "Running BUILD complete..."
 
