@@ -13,6 +13,7 @@
 const validatorLibrary = require('validator');
 const dateAndTime = require('date-and-time');
 const pool = require('../database/db');
+const moment = require('moment/moment');
 
 // ======================================================================
 // PRIVATE API FOR THIS MODULE
@@ -184,7 +185,7 @@ function maskStringNoCaseSensitive(originalString, maskText, responseString) {
  * @returns {boolean} Representing whether the format is correct or not
  */
 function isDateTimeFormat(dateString) {
-  if (dateAndTime.isValid(dateString, 'YYYY-MM-DD hh:mm:ss')) {
+  if (moment(dateString, 'YYYY-MM-DDThh:mm:ssZ').isValid()) {
     return true;
   }
   return false;

@@ -99,18 +99,23 @@ async function transactionDetails(log, pool, user, trans_id) {
   );
 }
 
-async function addTransaction(log, pool, user, { purpose, description, category, currencyCode, type, amount, mode, date, ...transaction }) {
+async function addTransaction(
+  log,
+  pool,
+  user,
+  { paymentMethod, purpose, description, category, currencyCode, type, amount, mode, date, refNumber, ...transaction },
+) {
   log.info(functionName('addTransaction'));
   return pool.execute(
     `INSERT INTO transactions (
           trans_user_id, trans_ledger_id, trans_lending_id, trans_parent_trans_id, trans_purpose,
           trans_description, trans_category, trans_currency_code, trans_type, trans_value,
-          trans_mode, trans_made_on
+          trans_mode, trans_made_on, trans_ref_number, trans_payment_method
         )
       VALUES (
           ?, ?, ?, ?, ?,
           ?, ?, ?, ?, ?,
-          ?, ?
+          ?, ?, ?, ?
         );`,
     [
       user.id,
@@ -124,7 +129,9 @@ async function addTransaction(log, pool, user, { purpose, description, category,
       type,
       amount,
       mode,
-      date,
+      date.replace('T', ' ').replace('Z', ''),
+      refNumber,
+      paymentMethod || null,
     ],
   );
 }

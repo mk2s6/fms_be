@@ -12,9 +12,9 @@ const routeName = (str) => `*** ledger-add ${str ? `|| ${str}` : ''} ***`;
 
 /**
  *
- * @api {POST} /ledgers Transactions add
- * @apiName Transactions add
- * @apiGroup Transactions
+ * @api {POST} /ledgers Ledgers add
+ * @apiName Ledgers add
+ * @apiGroup Ledgers
  * @apiVersion 0.0.1
  * @apiPermission none
  *
