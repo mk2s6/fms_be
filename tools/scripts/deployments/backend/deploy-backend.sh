@@ -15,7 +15,7 @@ if [ "$recreate" = "Y" ] || [ "$recreate" = "y" ]
 then
     echo "Recreating database"
     cd /var/app/fms_be/tools/scripts/deployments/
-    bash ./drop-and-create-db.sh
+    bash drop-and-create-db.sh
 fi
 
 cd /var/app/fms_be/
