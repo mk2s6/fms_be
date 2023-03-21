@@ -13,9 +13,10 @@ read -p "Do you want to Recreate-DB, If yes please give Y/y else please provide 
 
 if [ "$recreate" = "Y" ] || [ "$recreate" = "y" ]
 then
-    echo "Recreating database"
-    cd /var/app/fms_be/tools/scripts/deployments/
+    echo "Recreating database started"
+    cd /var/app/fms_be/tools/scripts/deployments/backend
     bash drop-and-create-db.sh
+    echo "Recreating database completed"
 fi
 
 cd /var/app/fms_be/
