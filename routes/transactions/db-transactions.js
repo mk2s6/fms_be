@@ -91,10 +91,11 @@ async function transactionDetails(log, pool, user, trans_id) {
   log.info(functionName('transactionDetails'));
   return pool.execute(
     `SELECT
-                trans_id AS id, trans_purpose AS purpose, trans_category AS category,
-                trans_description AS description, trans_currency_code AS currencyCode, trans_type AS type,
-                trans_value AS value, trans_mode AS mode, trans_made_on AS date
-   FROM transactions WHERE trans_id = ? AND trans_user_id = ? AND trans_is_deleted = ?;`,
+        trans_id AS id, trans_purpose AS purpose, trans_category AS category,
+        trans_description AS description, trans_currency_code AS currencyCode, trans_type AS type,
+        trans_value AS value, trans_mode AS mode, trans_made_on AS date
+   FROM transactions
+   WHERE trans_id = ? AND trans_user_id = ? AND trans_is_deleted = ?;`,
     [trans_id, user.id, 0],
   );
 }
