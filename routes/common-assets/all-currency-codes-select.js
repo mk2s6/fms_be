@@ -19,8 +19,6 @@ const routeName = (str) => `*** all-currency-codes-select ${str ? `|| ${str}` : 
  *
  * @apiPermission none
  *
- * @apiParam {String} country Country to get the Country Currency Codes
- *
  * @apiSuccessExample {json} Sample-Request-Response
  * {
  *     "data": {

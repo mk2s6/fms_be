@@ -79,6 +79,52 @@ INSERT INTO `country` VALUES ('Afghanistan','93','https://upload.wikimedia.org/w
 UNLOCK TABLES;
 
 --
+-- Table structure for table `credit`
+--
+
+DROP TABLE IF EXISTS `credit`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `credit` (
+  `credit_id` int unsigned NOT NULL AUTO_INCREMENT,
+  `credit_user_id` int unsigned NOT NULL,
+  `credit_ledger_id` int unsigned DEFAULT NULL,
+  `credit_purpose` text NOT NULL,
+  `credit_details` text NOT NULL,
+  `credit_category` varchar(50) NOT NULL,
+  `credit_to_name` varchar(100) NOT NULL,
+  `credit_to_email` varchar(120) DEFAULT NULL,
+  `credit_to_phone` varchar(20) DEFAULT NULL,
+  `credit_currency` varchar(50) NOT NULL,
+  `credit_amount` decimal(20,2) NOT NULL,
+  `credit_on_date` date NOT NULL,
+  `credit_is_borrowed` tinyint NOT NULL,
+  `credit_is_settled` tinyint NOT NULL DEFAULT '0',
+  `credit_is_created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `credit_is_updated_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `credit_notifications` tinyint NOT NULL DEFAULT '0',
+  `credit_is_deleted` tinyint NOT NULL DEFAULT '0',
+  PRIMARY KEY (`credit_id`),
+  KEY `FK_credit_USER_idx` (`credit_user_id`),
+  KEY `FK_credit_USER_TRANSACTION_idx` (`credit_user_id`),
+  KEY `FK_credit_LEDGER` (`credit_ledger_id`),
+  CONSTRAINT `FK_credit_LEDGER` FOREIGN KEY (`credit_ledger_id`) REFERENCES `ledgers` (`led_id`),
+  CONSTRAINT `FK_credit_USER` FOREIGN KEY (`credit_user_id`) REFERENCES `users` (`user_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `FK_credit_USER_TRANSACTION` FOREIGN KEY (`credit_user_id`) REFERENCES `transactions` (`trans_user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='	';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `credit`
+--
+
+LOCK TABLES `credit` WRITE;
+/*!40000 ALTER TABLE `credit` DISABLE KEYS */;
+INSERT INTO `credit` VALUES (4,8,NULL,'Testing lends','Ledning details','Mobile','Lender/Lendee Name','sivakusi.12@gmail.com','+918106302821','INR',1000.00,'2023-02-14',1,0,'2023-02-16 13:25:12','2023-02-16 13:25:12',0,0);
+/*!40000 ALTER TABLE `credit` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `currency_codes`
 --
 
@@ -141,52 +187,6 @@ INSERT INTO `ledgers` VALUES (1,8,'Testing','Testing transaction','Testing trans
 UNLOCK TABLES;
 
 --
--- Table structure for table `lendings`
---
-
-DROP TABLE IF EXISTS `lendings`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `lendings` (
-  `lend_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `lend_user_id` int unsigned NOT NULL,
-  `lend_ledger_id` int unsigned DEFAULT NULL,
-  `lend_purpose` text NOT NULL,
-  `lend_details` text NOT NULL,
-  `lend_category` varchar(50) NOT NULL,
-  `lend_to_name` varchar(100) NOT NULL,
-  `lend_to_email` varchar(120) DEFAULT NULL,
-  `lend_to_phone` varchar(20) DEFAULT NULL,
-  `lend_currency` varchar(50) NOT NULL,
-  `lend_amount` decimal(20,2) NOT NULL,
-  `lend_on_date` date NOT NULL,
-  `lend_is_borrowed` tinyint NOT NULL,
-  `lend_is_settled` tinyint NOT NULL DEFAULT '0',
-  `lend_is_created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `lend_is_updated_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `lend_notifications` tinyint NOT NULL DEFAULT '0',
-  `lend_is_deleted` tinyint NOT NULL DEFAULT '0',
-  PRIMARY KEY (`lend_id`),
-  KEY `FK_LEND_USER_idx` (`lend_user_id`),
-  KEY `FK_LEND_USER_TRANSACTION_idx` (`lend_user_id`),
-  KEY `FK_LEND_LEDGER` (`lend_ledger_id`),
-  CONSTRAINT `FK_LEND_LEDGER` FOREIGN KEY (`lend_ledger_id`) REFERENCES `ledgers` (`led_id`),
-  CONSTRAINT `FK_LEND_USER` FOREIGN KEY (`lend_user_id`) REFERENCES `users` (`user_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT `FK_LEND_USER_TRANSACTION` FOREIGN KEY (`lend_user_id`) REFERENCES `transactions` (`trans_user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='	';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `lendings`
---
-
-LOCK TABLES `lendings` WRITE;
-/*!40000 ALTER TABLE `lendings` DISABLE KEYS */;
-INSERT INTO `lendings` VALUES (4,8,NULL,'Testing lends','Ledning details','Mobile','Lender/Lendee Name','sivakusi.12@gmail.com','+918106302821','INR',1000.00,'2023-02-14',1,0,'2023-02-16 13:25:12','2023-02-16 13:25:12',0,0);
-/*!40000 ALTER TABLE `lendings` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `modules`
 --
 
@@ -228,7 +228,7 @@ CREATE TABLE `modules` (
 
 LOCK TABLES `modules` WRITE;
 /*!40000 ALTER TABLE `modules` DISABLE KEYS */;
-INSERT INTO `modules` VALUES (50,NULL,'MODHME','HOME','Home','Application Home',0,NULL,'/home',0,'1','user',1,1,1,0,0,'2023-02-05 06:05:39','2023-02-05 06:16:58',NULL,NULL,1),(51,NULL,'MODREG','REGISTRATION','REGISTER','USER REGISTRATION',1,NULL,'/register',0,'1','user',1,0,1,0,0,'2023-02-05 06:05:39','2023-02-05 06:16:58',NULL,NULL,1),(52,NULL,'MODSIG','SIGNIN','SIGN-IN','USER LOGIN',2,NULL,'/signin',0,'1','user',1,0,1,0,0,'2023-02-05 06:05:39','2023-02-05 12:59:46',NULL,NULL,1),(53,NULL,'MODTRN','TRANSACTIONS','TRANSACTIONS','USER TRANSACTIONS',4,NULL,'/transactions',0,'1','user',1,1,1,0,0,'2023-02-05 06:05:39','2023-02-05 06:16:58',NULL,NULL,1),(54,NULL,'MODLED','LEDGERS','LEDGERS','USER LEDGERS',5,NULL,'/ledgers',0,'1','user',1,1,1,0,0,'2023-02-05 06:05:39','2023-02-05 06:16:58',NULL,NULL,1),(55,NULL,'MODDBD','DASHBOARD','DASHBOARD','USER DASHBOARD',3,NULL,'/dashboard',0,'1','user',1,1,1,0,0,'2023-02-05 06:05:39','2023-02-05 06:16:58',NULL,NULL,1),(56,NULL,'MODLGT','SIGNOUT','SIGNOUT','SIGN OUT',999,NULL,'/signout',0,'1','user',1,1,1,0,0,'2023-02-05 06:05:39','2023-02-05 06:16:58',NULL,NULL,1),(57,NULL,'MODPRF','PROFILE','PROFILE','USER PROFILE',6,NULL,'/profile',0,'1','user',1,1,1,0,0,'2023-02-05 06:05:39','2023-02-05 06:16:58',NULL,NULL,1),(58,NULL,'MODPYM','PAYMENT METHODS','PAYMENT METHODS','PAYMENT METHODS',4,NULL,'/payment-methods',0,'1','user',1,1,1,0,0,'2023-02-05 06:05:39','2023-02-05 06:16:58',NULL,NULL,1),(59,NULL,'MODLEN','LENDINGS','LENDINGS','LENDINGS',5,NULL,'/lendings',0,'1','user',1,1,1,0,0,'2023-02-05 06:05:39','2023-02-05 06:16:58',NULL,NULL,1),(60,NULL,'MOD404','404','NOT FOUND','404 NOT FOUND',999,NULL,'/404',0,'1','user',1,0,1,0,0,'2023-04-07 11:06:58','2023-04-07 11:06:58',NULL,NULL,1);
+INSERT INTO `modules` VALUES (50,NULL,'MODHME','HOME','Home','Application Home',0,NULL,'/home',0,'1','user',1,1,1,0,0,'2023-02-05 06:05:39','2023-02-05 06:16:58',NULL,NULL,1),(51,NULL,'MODREG','REGISTRATION','REGISTER','USER REGISTRATION',1,NULL,'/register',0,'1','user',1,0,1,0,0,'2023-02-05 06:05:39','2023-02-05 06:16:58',NULL,NULL,1),(52,NULL,'MODSIG','SIGNIN','SIGN-IN','USER LOGIN',2,NULL,'/signin',0,'1','user',1,0,1,0,0,'2023-02-05 06:05:39','2023-02-05 12:59:46',NULL,NULL,1),(53,NULL,'MODTRN','TRANSACTIONS','TRANSACTIONS','USER TRANSACTIONS',4,NULL,'/transactions',0,'1','user',1,1,1,0,0,'2023-02-05 06:05:39','2023-02-05 06:16:58',NULL,NULL,1),(54,NULL,'MODLED','LEDGERS','LEDGERS','USER LEDGERS',5,NULL,'/ledgers',0,'1','user',1,1,1,0,0,'2023-02-05 06:05:39','2023-02-05 06:16:58',NULL,NULL,1),(55,NULL,'MODDBD','DASHBOARD','DASHBOARD','USER DASHBOARD',3,NULL,'/dashboard',0,'1','user',1,1,1,0,0,'2023-02-05 06:05:39','2023-02-05 06:16:58',NULL,NULL,1),(56,NULL,'MODLGT','SIGNOUT','SIGNOUT','SIGN OUT',999,NULL,'/signout',0,'1','user',1,1,1,0,0,'2023-02-05 06:05:39','2023-02-05 06:16:58',NULL,NULL,1),(57,NULL,'MODPRF','PROFILE','PROFILE','USER PROFILE',6,NULL,'/profile',0,'1','user',1,1,1,0,0,'2023-02-05 06:05:39','2023-02-05 06:16:58',NULL,NULL,1),(58,NULL,'MODPYM','PAYMENT METHODS','PAYMENT METHODS','PAYMENT METHODS',4,NULL,'/payment-methods',0,'1','user',1,1,1,0,0,'2023-02-05 06:05:39','2023-02-05 06:16:58',NULL,NULL,1),(59,NULL,'MODLEN','CREDIT','CREDIT','CREDIT MANAGEMENT - Lendings and Borrowing Tracking',5,NULL,'/credit',0,'1','user',1,1,1,0,0,'2023-02-05 06:05:39','2023-04-08 18:50:54',NULL,NULL,1),(60,NULL,'MOD404','404','NOT FOUND','404 NOT FOUND',999,NULL,'/404',0,'1','user',1,0,1,0,0,'2023-04-07 11:06:58','2023-04-07 11:06:58',NULL,NULL,1);
 /*!40000 ALTER TABLE `modules` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -371,7 +371,7 @@ CREATE TABLE `transactions` (
   KEY `FK_TRANS_CATEGORY_idx` (`trans_category`),
   KEY `FK_LENDING_TRANS_idx` (`trans_lending_id`,`trans_user_id`),
   KEY `FK_TRANS_PAYMENT_METHOD_idx` (`trans_payment_method`),
-  CONSTRAINT `FK_LENDING_TRANS_LINK` FOREIGN KEY (`trans_lending_id`) REFERENCES `lendings` (`lend_id`),
+  CONSTRAINT `FK_LENDING_TRANS_LINK` FOREIGN KEY (`trans_lending_id`) REFERENCES `credit` (`credit_id`),
   CONSTRAINT `FK_TRANS_CATEGORY` FOREIGN KEY (`trans_category`) REFERENCES `transaction_categories` (`trans_category`),
   CONSTRAINT `FK_TRANS_MODE` FOREIGN KEY (`trans_mode`) REFERENCES `transaction_modes` (`transaction_mode`),
   CONSTRAINT `FK_TRANS_PARENT_TRANSACTIONS` FOREIGN KEY (`trans_parent_trans_id`) REFERENCES `transactions` (`trans_id`),
@@ -498,4 +498,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-04-08 14:18:09
+-- Dump completed on 2023-04-09  0:22:19
