@@ -30,6 +30,6 @@ db-migrate up:tests
 echo "Running Migrations successful..."
 
 echo "Restarting server..."
-npm i
+npm i --production
 pm2 start ~/pm2.config.js
 echo "Server restarted..."
