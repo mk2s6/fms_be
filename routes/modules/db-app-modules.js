@@ -10,7 +10,7 @@ async function getModules(log, pool, authed) {
             module_description AS description, module_icon AS icon, module_route as route, module_is_sub_module isSubModule,
             module_parent_module AS isParentModule, module_sort_order AS sort
     FROM modules
-    WHERE module_status = ? AND module_require_auth = ?
+    WHERE module_status = ? AND (module_require_auth = ? OR module_code = 'MOD404')
     ORDER BY module_sort_order ASC;
   `,
     [1, authed],
