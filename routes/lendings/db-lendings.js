@@ -4,28 +4,38 @@ const functionName = (str) => `*** db-lendings ${str ? `| ${str}` : ''} ***`;
 async function lendingsList(log, pool, user, filters) {
   log.info(functionName('lendingsList'));
   const ORDER_BY = 'DESC';
-  return pool.execute(
-    `SELECT
-        lend_id AS id, lend_to_name AS toName, lend_currency AS currencyCode,
-        lend_amount AS amount, lend_on_date AS madeOn, lend_is_borrowed AS borrowingStatus,
-        lend_is_settled AS settlementStatus
-      FROM lendings
-      WHERE lend_user_id = ? AND lend_is_deleted = ?
-      ORDER BY lend_on_date ${ORDER_BY};`,
-    [user.id, 0],
-  );
+
+  let sqlSelectQuery = `
+      SELECT
+        credit_id AS id, credit_to_name AS toName, credit_currency AS currencyCode,
+        credit_amount AS amount, credit_on_date AS madeOn, credit_is_borrowed AS borrowingStatus,
+        credit_is_settled AS settlementStatus
+      FROM credit
+      WHERE credit_user_id = ? AND credit_is_deleted = ? `;
+  const sqlParams = [user.id, 0];
+
+  if (Object.keys(filters).length) {
+    if ('settled' in filters) {
+      sqlSelectQuery += ` AND credit_is_settled = ? `;
+      sqlParams.push(filters.settled);
+    }
+  }
+
+  sqlSelectQuery = `${sqlSelectQuery} ORDER BY credit_on_date ${ORDER_BY}`;
+
+  return pool.execute(sqlSelectQuery, sqlParams);
 }
 
 async function lendingDetails(log, pool, user, lendingId) {
   log.info(functionName('lendingDetails'));
   return pool.execute(
     `SELECT
-          lend_id AS id, lend_user_id AS userId, lend_to_name AS toName,
-          lend_to_email AS toEmail, lend_to_phone AS toPhone, lend_currency AS currencyCode, lend_amount AS amount,
-          lend_on_date AS onDate, lend_is_borrowed AS borrowingStatus, lend_is_settled AS settlementStatus,
-          lend_notifications AS notificationSettings
-        FROM lendings
-        WHERE lend_id = ? AND lend_user_id = ? AND lend_is_deleted = ?;`,
+          credit_id AS id, credit_user_id AS userId, credit_to_name AS toName,
+          credit_to_email AS toEmail, credit_to_phone AS toPhone, credit_currency AS currencyCode, credit_amount AS amount,
+          credit_on_date AS onDate, credit_is_borrowed AS borrowingStatus, credit_is_settled AS settlementStatus,
+          credit_notifications AS notificationSettings
+        FROM credit
+        WHERE credit_id = ? AND credit_user_id = ? AND credit_is_deleted = ?;`,
     [lendingId, user.id, 0],
   );
 }
@@ -40,9 +50,9 @@ async function addLending(
 
   return pool.execute(
     `INSERT INTO lendings (
-          lend_user_id, lend_ledger_id, lend_purpose, lend_details, lend_category,
-          lend_to_name, lend_to_email, lend_to_phone, lend_currency, lend_amount,
-          lend_on_date, lend_is_borrowed
+          credit_user_id, credit_ledger_id, credit_purpose, credit_details, credit_category,
+          credit_to_name, credit_to_email, credit_to_phone, credit_currency, credit_amount,
+          credit_on_date, credit_is_borrowed
         )
       VALUES (
           ?, ?, ?, ?, ?,
