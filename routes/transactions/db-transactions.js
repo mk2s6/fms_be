@@ -107,6 +107,22 @@ async function addTransaction(
   { paymentMethod, purpose, description, category, currencyCode, type, amount, mode, date, refNumber, ...transaction },
 ) {
   log.info(functionName('addTransaction'));
+  console.log(
+    user.id,
+    transaction.ledgerId || null,
+    transaction.lendingId || null,
+    transaction.parentTransaction || null,
+    purpose,
+    description,
+    category,
+    currencyCode,
+    type,
+    amount,
+    mode,
+    date.replace('T', ' ').replace('Z', ''),
+    refNumber || null,
+    paymentMethod || null,
+  );
   return pool.execute(
     `INSERT INTO transactions (
           trans_user_id, trans_ledger_id, trans_lending_id, trans_parent_trans_id, trans_purpose,
@@ -131,7 +147,7 @@ async function addTransaction(
       amount,
       mode,
       date.replace('T', ' ').replace('Z', ''),
-      refNumber,
+      refNumber || null,
       paymentMethod || null,
     ],
   );
