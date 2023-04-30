@@ -36,7 +36,7 @@ router.put('/:id', addLending, paramLendingIdValidation, async (req, res, next) 
     if (e instanceof RG.APIError) {
       return next(e);
     }
-    return next(new RG.APIError(1, ERR_INTERNAL_SERVER_ERROR));
+    return next(new RG.APIError(1, 'ERR_INTERNAL_SERVER_ERROR'));
   }
 });
 

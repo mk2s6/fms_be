@@ -107,22 +107,7 @@ async function addTransaction(
   { paymentMethod, purpose, description, category, currencyCode, type, amount, mode, date, refNumber, ...transaction },
 ) {
   log.info(functionName('addTransaction'));
-  console.log(
-    user.id,
-    transaction.ledgerId || null,
-    transaction.lendingId || null,
-    transaction.parentTransaction || null,
-    purpose,
-    description,
-    category,
-    currencyCode,
-    type,
-    amount,
-    mode,
-    date.replace('T', ' ').replace('Z', ''),
-    refNumber || null,
-    paymentMethod || null,
-  );
+
   return pool.execute(
     `INSERT INTO transactions (
           trans_user_id, trans_ledger_id, trans_lending_id, trans_parent_trans_id, trans_purpose,
@@ -231,6 +216,17 @@ async function deleteTransaction(log, pool, user, id) {
   );
 }
 
+async function deleteLendingTransactions(log, pool, user, id) {
+  log.info(functionName('deleteLendingTransactions'));
+  return pool.execute(
+    ` UPDATE transactions
+      SET trans_is_deleted = ?
+      WHERE trans_lending_id = ? AND trans_user_id = ? AND trans_is_deleted = ?;
+      `,
+    [1, id, user.id, 0],
+  );
+}
+
 module.exports = {
   deleteTransaction,
   transactionsList,
@@ -239,4 +235,5 @@ module.exports = {
   transactionUpdateStatus,
   updateTransaction,
   transactionDeleteStatus,
+  deleteLendingTransactions,
 };

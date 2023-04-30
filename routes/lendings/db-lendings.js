@@ -81,7 +81,7 @@ async function addLending(
 }
 
 async function validateLendingStatuses(log, pool, user, id) {
-  const [details] = await lendingDetails(log, pool, user, id);
+  const [[details]] = await lendingDetails(log, pool, user, id);
 
   if (!details) throw new APIError(2, 'ERR_LENDING_NOT_AVAILABLE');
 
@@ -129,7 +129,7 @@ async function updateLending(
   );
 }
 
-async function settleLending(log, pool, user, { id }) {
+async function settleLending(log, pool, user, id) {
   log.info(functionName('updateLending'));
 
   await validateLendingStatuses(log, pool, user, id);
@@ -143,4 +143,16 @@ async function settleLending(log, pool, user, { id }) {
   );
 }
 
-module.exports = { lendingsList, lendingDetails, addLending, updateLending, settleLending };
+async function deleteLending(log, pool, user, id) {
+  log.info(functionName('deleteLending'));
+
+  return pool.execute(
+    `
+      UPDATE credit
+      SET credit_is_deleted = ?
+      WHERE credit_id = ? AND credit_user_id = ? AND credit_is_deleted = ?`,
+    [1, id, user.id, 0],
+  );
+}
+
+module.exports = { lendingsList, lendingDetails, addLending, updateLending, settleLending, deleteLending };

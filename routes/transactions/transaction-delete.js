@@ -29,6 +29,7 @@ router.delete('/:id', paramTransactionIdValidation, async (req, res) => {
   log.info(routeName('Execution Started'));
   try {
     await db.transactionDeleteStatus(log, pool, req.user, req.params.id);
+
     await db.deleteTransaction(log, pool, req.user, req.params.id);
     return res.status(200).send(RG.success('Transactions update', 'Transactions updated Successfully!!!', [req.body]));
   } catch (e) {

@@ -36,7 +36,7 @@ const Router = require('./routes/routes');
 const { errList } = require('./model/error');
 const { validateSession } = require('./model/auth');
 const { pinoHttp } = require('pino-http');
-const { currentDate } = require('./utils/dates');
+const { currentDate, getCurrentDateTime } = require('./utils/dates');
 
 const app = express();
 

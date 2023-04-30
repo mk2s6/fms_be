@@ -33,6 +33,7 @@ router.post('/', addLending, async (req, res) => {
     const [rows] = await db.addLending(log, T, req.user, req.body);
 
     const lending = { ...req.body, lendingId: rows.insertId, type: req.body.isBorrowed ? 'CREDIT' : 'DEBIT' };
+
     await db.addTransaction(log, T, req.user, { ...lending, description: lending.details, date: lending.onDate });
 
     await commitTransaction(log, T);

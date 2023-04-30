@@ -10,7 +10,7 @@ const { getCurrentDateTime } = require('../../utils/dates');
 const router = express.Router();
 
 // eslint-disable-next-line arrow-parens
-const routeName = (str) => `*** lending-settle ${str ? `|| ${str}` : ''} ***`;
+const routeName = (str) => `*** lending-delete ${str ? `|| ${str}` : ''} ***`;
 
 /**
  *
@@ -24,30 +24,20 @@ const routeName = (str) => `*** lending-settle ${str ? `|| ${str}` : ''} ***`;
  *
  * @apiSampleRequest /lendings
  */
-router.put('/:id', paramLendingIdValidation, async (req, res, next) => {
+router.delete('/:id', paramLendingIdValidation, async (req, res, next) => {
   const log = req.logger;
   log.info(routeName('Execution Started'));
   let T;
   try {
     T = await startTransaction(log, pool);
 
-    const settlementTime = getCurrentDateTime();
+    await db.deleteLending(log, T, req.user, req.params.id);
 
-    await db.settleLending(log, T, req.user, req.params.id);
-
-    const [[lending]] = await db.lendingDetails(log, T, req.user, req.params.id);
-
-    await db.addTransaction(log, T, req.user, {
-      ...lending,
-      purpose: `${lending.purpose} - Settlement`,
-      description: `${lending.details} - Settlement`,
-      date: settlementTime,
-      type: lending.borrowingStatus ? 'DEBIT' : 'CREDIT',
-    });
+    // Delete transactions for lending
+    await db.deleteLendingTransactions(log, T, req.user, req.params.id);
 
     await commitTransaction(log, T);
-
-    return RG.respondSuccess(res)('lending settle', 'lending settled Successfully.!!!', []);
+    return RG.respondSuccess(res)('lending delete', 'lending deleted Successfully.!!!', []);
   } catch (e) {
     log.error({ msg: e, location: routeName('Error') });
     T && (await rollbackTransaction(log, T));
