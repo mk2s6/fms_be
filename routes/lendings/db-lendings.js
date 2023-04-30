@@ -1,3 +1,5 @@
+const { APIError } = require('../../model/response-generator');
+
 // eslint-disable-next-line arrow-parens
 const functionName = (str) => `*** db-lendings ${str ? `| ${str}` : ''} ***`;
 
@@ -78,4 +80,67 @@ async function addLending(
   );
 }
 
-module.exports = { lendingsList, lendingDetails, addLending };
+async function validateLendingStatuses(log, pool, user, id) {
+  const [details] = await lendingDetails(log, pool, user, id);
+
+  if (!details) throw new APIError(2, 'ERR_LENDING_NOT_AVAILABLE');
+
+  if (details.settlementStatus) throw new APIError(2, 'ERR_LENDING_ALREADY_SETTLED');
+
+  return true;
+}
+
+async function updateLending(
+  log,
+  pool,
+  user,
+  { ledger, purpose, details, category, toName, toEmail, toPhone, currencyCode, amount, onDate, isBorrowed, mode },
+  { id },
+) {
+  log.info(functionName('updateLending'));
+
+  await validateLendingStatuses(log, pool, user, id);
+
+  return pool.execute(
+    `
+      UPDATE credit
+      SET
+          credit_ledger_id = ?, credit_purpose = ?, credit_details = ?, credit_category = ?,
+          credit_to_name = ?, credit_to_email = ?, credit_to_phone = ?, credit_currency = ?, credit_amount = ?,
+          credit_on_date = ?, credit_is_borrowed = ?, credit_mode = ?
+      WHERE credit_id = ? AND credit_user_id = ? AND credit_is_settled = ?`,
+    [
+      ledger || null,
+      purpose,
+      details,
+      category,
+      toName,
+      toEmail || null,
+      toPhone || null,
+      currencyCode,
+      amount,
+      onDate.replace('T', ' ').replace('Z', ''),
+      isBorrowed,
+      mode,
+      id,
+      user.id,
+      0,
+    ],
+  );
+}
+
+async function settleLending(log, pool, user, { id }) {
+  log.info(functionName('updateLending'));
+
+  await validateLendingStatuses(log, pool, user, id);
+
+  return pool.execute(
+    `
+      UPDATE credit
+      SET credit_is_settled = ?
+      WHERE credit_id = ? AND credit_user_id = ? AND credit_is_settled = ?`,
+    [1, id, user.id, 0],
+  );
+}
+
+module.exports = { lendingsList, lendingDetails, addLending, updateLending, settleLending };

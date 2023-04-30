@@ -1118,7 +1118,6 @@ function isValidPastDateTodayAllowed(location, date) {
   const validator = getFunctionName(location);
   return validator(date)
     .custom((paramDate) => {
-      console.log(paramDate, hf.isDateTimeFormat(paramDate), hf.dateStringToDate(paramDate), hf.getFormatToday());
       if (!hf.isDateTimeFormat(paramDate) || hf.dateStringToDate(paramDate) > hf.getFormatToday()) {
         return false;
       }

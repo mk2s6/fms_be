@@ -9,6 +9,7 @@ const config = require('config');
 const constant = require('./constant');
 const pino = require('pino');
 const pretty = require('pino-pretty');
+const { currentFNSDate } = require('../utils/dates');
 
 const loggingLevels = {
   error: 90,
@@ -38,15 +39,15 @@ const logger = pino(
 
 logger.info('Loading Logger Module - PINO..!');
 
-const today = new Date();
+const logFileName = () => `./logs/${currentFNSDate()}.log`;
 
-const logFileName = () => `./logs/${today.getDate()}-${constant.monthNames[today.getMonth()]}-${today.getFullYear()}.log`;
+const loggingStreams = [];
 
-const loggingStreams = [
-  {
+if (config.get('log_to_files') === 'true') {
+  loggingStreams.push({
     stream: pino.destination(logFileName()),
-  },
-];
+  });
+}
 
 if (config.get('log_to_console') === 'true') {
   loggingStreams.push({ stream: pretty({ colorize: true, customColors }) });

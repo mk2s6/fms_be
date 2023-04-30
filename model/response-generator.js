@@ -51,6 +51,12 @@ function ErrorsObj(errMessage, errField, errLocation) {
   this.location = errLocation;
 }
 
+// Type = 1-Internal Error, 2-DB Error, 3-FatalError
+function APIError(type, E, status=null) {
+  this.type = type;
+  this.error = E
+  this.status=status
+}
 /**
  * Generate error response to be send to client. This is mostly used in cases
  * when we are not able to classify the type of error.
@@ -244,6 +250,26 @@ const respondInternalError =
       errors: [],
     });
   };
+
+
+const sendErrorResponse = (res) => (e) => {
+  try {
+    const TYPE = constant.ErrorTypes[e.type];
+    const STATUS = e.status || constant.ErrorStatuses[e.type];
+
+    const errListObj = errList[TYPE][e.error];
+
+    return res.status(STATUS).send({
+      type: e.type,
+      code: errListObj.code,
+      message: errListObj.message,
+      errors: [],
+    });
+  } catch (e) {
+    console.log(e);
+    return e;
+  }
+};
 // EXPORTING FUNCTIONALITY
 
 module.exports.errorResponse = errorResponse;
@@ -252,8 +278,9 @@ module.exports.dbError = dbError;
 module.exports.fatalError = fatalError;
 module.exports.validationError = validationError;
 module.exports.authError = authError;
-
+module.exports.APIError = APIError;
 module.exports.success = success;
 module.exports.respondSuccess = respondSuccess;
 module.exports.respondDBError = respondDBError;
 module.exports.respondInternalError = respondInternalError;
+module.exports.sendErrorResponse = sendErrorResponse;

@@ -36,6 +36,7 @@ const Router = require('./routes/routes');
 const { errList } = require('./model/error');
 const { validateSession } = require('./model/auth');
 const { pinoHttp } = require('pino-http');
+const { currentDate } = require('./utils/dates');
 
 const app = express();
 
@@ -90,19 +91,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use((req, res, next) => {
-  const log = req.logger;
-  log.info('Execution Started');
-  process.on('unhandledRejection', function (err) {
-    log.warn({ msg: '*** app | unhandledRejection ***', err });
-    return res.send(RG.internalError(errList.internalError.ERR_INSERT_USER_INSERT_FAILURE));
-  });
-  process.on('unhandledException', function (err, req, res) {
-    log.warn({ msg: '*** app | unhandledRejection ***', err });
-    return res.send(RG.internalError(errList.internalError.ERR_GLOBAL_UNHANDLED_EXCEPTION));
-  });
-  next();
-});
+// app.use((req, res, next) => {
+//   const log = req.logger;
+//   log.info('Execution Started');
+//   process.on('unhandledRejection', function (err) {
+//     log.warn({ msg: '*** app | unhandledRejection ***', err });
+//     return res.send(RG.internalError(errList.internalError.ERR_INSERT_USER_INSERT_FAILURE));
+//   });
+//   process.on('unhandledException', function (err, req, res) {
+//     log.warn({ msg: '*** app | unhandledRejection ***', err });
+//     return res.send(RG.internalError(errList.internalError.ERR_GLOBAL_UNHANDLED_EXCEPTION));
+//   });
+//   next();
+// });
 
 // available in production environment0.0
 if (config.get('environment') !== 'production') {
@@ -144,6 +145,13 @@ if (config.get('environment') === 'test') {
   app.use('/QA/validator_sanitizer', testValidatorSanitizerRouter);
 }
 
+app.use((err, _req, res, next) => {
+  if (err instanceof RG.APIError) {
+    return RG.sendErrorResponse(res)(err);
+  }
+  next(err);
+});
+
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
   next(createError(404));
@@ -161,5 +169,7 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.send(RG.errorResponse('Not Found', err.status, 'Resource you are trying to access is not found', '', req.url));
 });
+
+
 
 module.exports = app;

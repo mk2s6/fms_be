@@ -5,6 +5,7 @@
   },
   "log_level": "LOG_LEVEL",
   "log_to_console": "LOG_TO_CONSOLE",
+  "log_to_files": "LOG_TO_FILES",
   "log_handle_exception": "LOG_HANDLE_EXCEPTION",
   "log_handle_rejection": "LOG_HANDLE_REJECTION",
   "log_incoming_request": "LOG_INCOMING_REQUEST",

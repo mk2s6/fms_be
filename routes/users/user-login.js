@@ -8,6 +8,7 @@ const { userLoginValidations } = require('./validations');
 const { insertSessionDetails, getSessionDetailsById } = require('../auth/db-auth');
 
 const db = require('./db-users');
+const { addNDaysToToday } = require('../../utils/dates');
 
 const router = express.Router();
 
@@ -77,11 +78,9 @@ router.post('', userLoginValidations, async (req, res) => {
     return res.status(400).send(generateToken);
   }
 
-  let validity = null;
-
-  const date = new Date();
-  validity = date.setDate(date.getDate() + req.body.rememberMe ? 30 : 2);
-  validity = new Date(validity).toISOString().replace('T', ' ').replace('Z', '');
+  const validity = addNDaysToToday(req.body.rememberMe ? 30 : 2)
+    .replace('T', ' ')
+    .replace('Z', '');
 
   const sessionObject = { jwt: token, validity, host: req.hostname, ip: req.ip };
   let sessionDetails;

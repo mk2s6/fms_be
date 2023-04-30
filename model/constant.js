@@ -3,6 +3,8 @@
  * These constants are not needed in front end.
  */
 
+const { StatusCodes } = require('http-status-codes');
+
 // TO IMPORT: const constant = require('./constant');
 
 /**
@@ -13,6 +15,21 @@ const errType = {
   INTERNAL_ERROR: 1,
   DB_ERROR: 2,
   AUTH_ERROR: 3, // Frontend should redirect to Login page
+};
+
+
+const ErrorTypes = {
+  0: 'validationError',
+  1: 'internalError',
+  2: 'dbError',
+  3: 'authError',
+};
+
+const ErrorStatuses = {
+  0: StatusCodes.UNPROCESSABLE_ENTITY,
+  1: StatusCodes.INTERNAL_SERVER_ERROR,
+  2: StatusCodes.BAD_REQUEST,
+  3: StatusCodes.UNAUTHORIZED,
 };
 
 /**
@@ -199,3 +216,5 @@ module.exports.moduleModes = moduleModes;
 
 // Testing related exports
 module.exports.testTimeout = testTimeout;
+module.exports.ErrorStatuses = ErrorStatuses;
+module.exports.ErrorTypes = ErrorTypes;

@@ -248,15 +248,18 @@ const errList = {
       message: 'This transaction can not be added to lending, lending have been settled.!',
       internalDescription: 'Employee with the given username already exists',
     },
-  }, // End of DB error Array
+    ERR_LENDING_NOT_AVAILABLE: {
+      code: '30035',
+      message: 'Lending does not exist or have been deleted.!',
+      internalDescription: 'Lending does not exist or have been deleted.!',
+    },
+    ERR_LENDING_ALREADY_SETTLED: {
+      code: '30036',
+      message: 'Lending have been already settled, updates can not be processed.!',
+      internalDescription: 'Lending does not exist or have been deleted.!',
+    },
+  },
 
-  //
-  // INTERNAL SERVER ERRORS
-  // These errors occurs when some server modules throws error
-  // For example hashing module or encoding module. The operation
-  // done on server which does not involve DB. This also involve some external API
-  // call returned error or failed.
-  //
   internalError: {
     ERR_HASH_PASSWORD: {
       code: '50001',
@@ -616,6 +619,11 @@ const errList = {
       code: '50070',
       message: errMsg.INTERNAL_SERVER_ERROR,
       internalDescription: 'while selecting restaurants list there is an error in selection',
+    },
+    ERR_INTERNAL_SERVER_ERROR: {
+      code: '50071',
+      message: errMsg.INTERNAL_SERVER_ERROR,
+      internalDescription: 'UN-RESOLVED ERRORS',
     },
   }, // End of Internal Error Array
 };
