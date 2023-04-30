@@ -39,6 +39,7 @@ router.put('/:id', paramLendingIdValidation, async (req, res, next) => {
 
     await db.addTransaction(log, T, req.user, {
       ...lending,
+      lendingId: lending.id,
       purpose: `${lending.purpose} - Settlement`,
       description: `${lending.details} - Settlement`,
       date: settlementTime,
