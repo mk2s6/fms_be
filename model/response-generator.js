@@ -8,6 +8,7 @@
 const { StatusCodes } = require('http-status-codes');
 const constant = require('./constant');
 const { errList } = require('./error');
+const { encryptResponse } = require('../utils/security');
 
 //
 // My Error Response JSON Object:
@@ -52,10 +53,10 @@ function ErrorsObj(errMessage, errField, errLocation) {
 }
 
 // Type = 1-Internal Error, 2-DB Error, 3-FatalError
-function APIError(type, E, status=null) {
+function APIError(type, E, status = null) {
   this.type = type;
-  this.error = E
-  this.status=status
+  this.error = E;
+  this.status = status;
 }
 /**
  * Generate error response to be send to client. This is mostly used in cases
@@ -193,7 +194,7 @@ function success(resKind, resDescription, resItems) {
     data: {
       kind: resKind,
       description: resDescription,
-      items: resItems,
+      items: encryptResponse(resItems),
     },
   };
 }

@@ -37,6 +37,8 @@ const { errList } = require('./model/error');
 const { validateSession } = require('./model/auth');
 const { pinoHttp } = require('pino-http');
 const { currentDate, getCurrentDateTime } = require('./utils/dates');
+const { decryptBody, encryptResponse } = require('./utils/security');
+const { add } = require('./utils/math-functions');
 
 const app = express();
 
@@ -120,6 +122,8 @@ if (config.get('log_incoming_request') === 'true') {
 app.use('/img', express.static(path.join(__dirname, 'public/img')));
 
 app.use(validateSession);
+app.use(decryptBody);
+
 
 // The docs which gives REST API out backend support should not be
 
