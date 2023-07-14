@@ -1,9 +1,9 @@
 const express = require('express');
-const db = require('./db-transactions');
 const pool = require('../../database/db');
 const { errList } = require('../../model/error');
 const RG = require('../../model/response-generator');
 
+const db = { ...require('../payment-methods/db-payment-methods'), ...require('./db-transactions') };
 const router = express.Router();
 
 // eslint-disable-next-line arrow-parens
@@ -27,8 +27,12 @@ router.get('/:id', async (req, res) => {
   const log = req.logger;
   log.info(routeName('Execution Started'));
   try {
-    const [rows] = await db.transactionDetails(log, pool, req.user, req.params.id);
-    return res.status(200).send(RG.success('Transactions list', 'Transactions list Successfully retrieved!!!', rows));
+    const response = await db.transactionDetails(log, pool, req.user, req.params.id);
+    if (response[0].paymentMethod) {
+      [response[0].paymentMethod] = (await db.paymentMethodDetails(log, pool, req.user, response[0].paymentMethod))[0];
+    }
+
+    return res.status(200).send(RG.success('Transactions list', 'Transactions list Successfully retrieved!!!', response));
   } catch (e) {
     log.error({ msg: routeName('Error'), err: e });
     const generateToken = RG.internalError(errList.internalError.ERR_LOGIN_TOKEN_GENERATION_ERROR);

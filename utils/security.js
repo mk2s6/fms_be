@@ -36,7 +36,7 @@ function encryptResponse(obj) {
 
 function decryptKeyValues(_key, _value) {
   if (typeof _value === 'object') {
-    return [convertFromBase64(_key), decryptResponse(_value)];
+    return [convertFromBase64(_key), decryptRequest(_value)];
   }
 
   let [key, value] = [convertFromBase64(_key), convertFromBase64(_value)];

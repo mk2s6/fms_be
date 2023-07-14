@@ -89,15 +89,45 @@ async function transactionsList(log, pool, user, filters) {
 
 async function transactionDetails(log, pool, user, trans_id) {
   log.info(functionName('transactionDetails'));
-  return pool.execute(
+  const [[details]] = await pool.execute(
     `SELECT
-        trans_id AS id, trans_purpose AS purpose, trans_category AS category,
-        trans_description AS description, trans_currency_code AS currencyCode, trans_type AS type,
-        trans_value AS value, trans_mode AS mode, trans_made_on AS date
+        trans_id AS id, trans_purpose AS purpose, trans_category AS category, trans_description AS description,
+        trans_currency_code AS currencyCode, trans_type AS type, trans_value AS value, trans_mode AS mode,
+        trans_made_on AS date, trans_ref_number AS referenceNumber, trans_payment_method AS paymentMethod,
+        trans_parent_trans_id AS parentTransaction, trans_lending_id AS lendingId, trans_ledger_id AS ledgerId
    FROM transactions
    WHERE trans_id = ? AND trans_user_id = ? AND trans_is_deleted = ?;`,
     [trans_id, user.id, 0],
   );
+
+  if (details.parentTransaction) {
+    [details.parentTransaction] = await pool.execute(
+      `
+        SELECT
+              trans_id AS id, trans_purpose AS purpose, trans_category AS category, trans_description AS description,
+              trans_currency_code AS currencyCode, trans_type AS type, trans_value AS value, trans_mode AS mode,
+              trans_made_on AS date, trans_payment_method AS paymentMethod
+        FROM transactions
+        WHERE trans_id = ? AND trans_user_id = ? AND trans_is_deleted = ?;
+    `,
+      [details.parentTransaction, user.id, 0],
+    );
+  }
+
+  if (details.lendingId) {
+    [[details.lending]] = await pool.execute(
+      `
+      SELECT
+        credit_id AS id, credit_to_name AS toName, credit_currency AS currencyCode,
+        credit_amount AS amount, credit_on_date AS madeOn, credit_is_borrowed AS borrowingStatus,
+        credit_is_settled AS settlementStatus
+      FROM credit
+      WHERE credit_id = ? AND credit_user_id = ? AND credit_is_deleted = ? `,
+      [details.lendingId, user.id, 0],
+    );
+  }
+
+  return [details];
 }
 
 async function addTransaction(
