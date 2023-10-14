@@ -2,7 +2,7 @@
 
 ECHO "EXPORT DATABASE"
 cd ..\\..\\
-mysqldump -u root -p --databases mk2s_fms  > .\\migrations\\initialize-base-db.sql
+@REM mysqldump -u root -p --databases mk2s_fms  > .\\migrations\\initialize-base-db.sql
 ECHO "EXPORT COMPLETE"
 
 
