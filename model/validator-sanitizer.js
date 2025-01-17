@@ -834,8 +834,8 @@ function ifExistsIsNumeric(location, fieldName, message) {
       if (hf.isEmptyValue(paramField)) {
         return true;
       }
-      validatorLibrary.trim(paramField);
-      if (validatorLibrary.isNumeric(paramField)) {
+
+      if (validatorLibrary.isNumeric(paramField.toString())) {
         return true;
       }
       return false;
@@ -855,7 +855,7 @@ function ifExistsIsNumeric(location, fieldName, message) {
 function isNonNegativeNumeric(location, fieldName, message) {
   const validator = getFunctionName(location);
   return validator(fieldName)
-    .custom((paramFieldName) => hf.isNonNegativeDecimal(paramFieldName))
+    .custom((paramFieldName) => hf.isNonNegativeDecimal(paramFieldName.toString()))
     .withMessage(message);
 }
 
@@ -875,7 +875,7 @@ function ifExistsIsNonNegativeNumeric(location, fieldName, message) {
       if (hf.isEmptyValue(paramFieldName)) {
         return true;
       }
-      return hf.isNonNegativeDecimal(paramFieldName);
+      return hf.isNonNegativeDecimal(paramFieldName.toString());
     })
     .withMessage(message);
 }

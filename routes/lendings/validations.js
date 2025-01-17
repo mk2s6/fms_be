@@ -1,5 +1,4 @@
 const vs = require('../../model/validator-sanitizer');
-const constant = require('../../model/constant');
 const VALIDATIONS_FOR = 'Lending Validations';
 
 module.exports = {
@@ -14,11 +13,12 @@ module.exports = {
     vs.isAmount('body', 'amount', 'Please provide a valid amount.'),
     vs.isValidPastDateTodayAllowed('body', 'onDate'),
     vs.isBoolean('body', 'isBorrowed', 'Please choose whether the transaction is a being Borrowed or Lending.!'),
+    vs.ifExistsIsNumeric('body', 'paymentMethod', 'Please choose valid payment method.!'),
     vs.returnValidations(VALIDATIONS_FOR, 'Add lending'),
   ],
 
   paramLendingIdValidation: [
     vs.isNumeric('params', 'id', 'Please choose a valid lending to proceed.!'),
-    vs.returnValidations(VALIDATIONS_FOR, 'Ledger ID Parameter '),
+    vs.returnValidations(VALIDATIONS_FOR, 'lending ID Parameter '),
   ],
 };

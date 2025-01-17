@@ -24,6 +24,7 @@ router.get('/', async (req, res) => {
   log.info(routeName('Execution Started'));
   try {
     const [rows] = await db.lendingsList(log, pool, req.user, req.query);
+    console.log(rows);
     return res.status(200).send(RG.success('Lendings list', 'Lendings list Successfully retrieved!!!', rows));
   } catch (e) {
     log.error({ msg: routeName('Error'), err: e });

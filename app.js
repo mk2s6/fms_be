@@ -111,7 +111,6 @@ app.use(cookieParser());
 if (config.get('environment') !== 'production') {
   app.use('/docs', express.static(path.join(__dirname, 'docs')));
 }
-
 if (config.get('log_incoming_request') === 'true') {
   app.use((req, res, next) => {
     pinoHttp({ logger: req.logger, useLevel: 'http' })(req, res);
@@ -122,7 +121,7 @@ if (config.get('log_incoming_request') === 'true') {
 app.use('/img', express.static(path.join(__dirname, 'public/img')));
 
 app.use(validateSession);
-app.use(decryptBody);
+// app.use(decryptBody);
 
 
 // The docs which gives REST API out backend support should not be

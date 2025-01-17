@@ -194,7 +194,8 @@ function success(resKind, resDescription, resItems) {
     data: {
       kind: resKind,
       description: resDescription,
-      items: encryptResponse(JSON.parse(JSON.stringify(resItems))),
+      // items: encryptResponse(JSON.parse(JSON.stringify(resItems))),
+      items: resItems,
     },
   };
 }

@@ -26,11 +26,11 @@ const routeName = (str) => `*** ledger-update ${str ? `|| ${str}` : ''} ***`;
  *
  * @apiSampleRequest /ledgers
  */
-router.post('/', addLedger, paramLedgerIdValidation, async (req, res) => {
+router.put('/:id', addLedger, paramLedgerIdValidation, async (req, res) => {
   const log = req.logger;
   log.info(routeName('Execution Started'));
   try {
-    await db.updateLedger(log, pool, req.user, { ...req.body, id: req.params.id });
+    // await db.updateLedger(log, pool, req.user, { ...req.body, id: req.params.id });
     return res.status(200).send(RG.success('Ledger updated', 'Ledger updated successfully!!!', [req.body]));
   } catch (e) {
     log.error({ msg: routeName('Error'), err: e });

@@ -4,7 +4,7 @@ const VALIDATIONS_FOR = 'Ledger Validations';
 
 module.exports = {
   addLedger: [
-    vs.isValidStrLenWithTrim('body', 'name', 3, 100, 'Please provide valid User name'),
+    vs.isValidStrLenWithTrim('body', 'name', 3, 100, 'Please provide valid ledger name'),
     vs.isValidStrLenWithTrim('body', 'description', 3, 250, 'Please provide valid User name'),
     vs.isValidStrLenWithTrim('body', 'purpose', 3, 500, 'Please provide valid User name'),
     vs.isArray('body', 'category'),

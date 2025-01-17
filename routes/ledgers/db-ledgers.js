@@ -6,7 +6,8 @@ async function ledgersList(log, pool, user, filters) {
   const ORDER_BY = 'ASC';
   return pool.execute(
     `SELECT
-        led_id AS id, led_name AS name, led_categories AS category
+        led_id AS id, led_name AS name, led_categories AS category, led_purpose AS purpose, led_details AS details,
+        led_total_debits AS totalDebits, led_total_credits AS totalCredits
    FROM ledgers WHERE led_user_id = ? AND led_is_deleted = ?
    ORDER BY led_name ${ORDER_BY};`,
     [user.id, 0],

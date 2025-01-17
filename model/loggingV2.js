@@ -14,8 +14,8 @@ const { currentFNSDate } = require('../utils/dates');
 const loggingLevels = {
   error: 90,
   warn: 80,
-  info: 70,
-  http: 60,
+  http: 70,
+  info: 60,
   verbose: 50,
   debug: 45,
   silly: 0,

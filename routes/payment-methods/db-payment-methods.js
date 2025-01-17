@@ -10,9 +10,9 @@ async function paymentMethodsList(log, pool, user, filters) {
           pm_id AS id, pm_type AS type, pm_name AS name, pm_last_4_digits AS last4Digits,
           pm_is_active AS active, pm_is_deleted AS isDeleted
       FROM payment_methods
-      WHERE pm_user_id = ?
+      WHERE pm_user_id = ? and pm_is_deleted != ?
       ORDER BY pm_type ${ORDER_BY}, pm_name ${ORDER_BY};`,
-    [user.id],
+    [user.id, true],
   );
 }
 
@@ -60,4 +60,16 @@ async function togglePaymentMethodStatus(log, pool, user, status, id) {
   );
 }
 
-module.exports = { paymentMethodsList, paymentMethodDetails, addPaymentMethod, updatePaymentMethod, togglePaymentMethodStatus };
+async function deletePaymentMethod(log, pool, user, id) {
+  log.info(functionName('deletePaymentMethod'));
+
+  return pool.execute(
+    `
+      UPDATE payment_methods
+      SET pm_is_active = ?, pm_is_deleted = ?
+      WHERE pm_id = ? AND pm_user_id = ?`,
+    [false, true, id, user.id],
+  );
+}
+
+module.exports = { paymentMethodsList, paymentMethodDetails, addPaymentMethod, updatePaymentMethod, togglePaymentMethodStatus, deletePaymentMethod };
