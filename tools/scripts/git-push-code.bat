@@ -1,4 +1,5 @@
 @ECHO OFF
+setlocal
 
 SET /p db_export = "Do you want to export complete DB? : "
 IF /i "%db_export%" == "y" OR "%db_export%" == "Y" GOTO EXPORT_DB
@@ -14,7 +15,7 @@ ECHO "EXPORT COMPLETE"
 :COMMIT
 SET /p commit_message="What do you want the commit message to be? : "
 ECHO "commit message "
-/i echo Committing with message: "%commit_message%"
+echo Committing with message: "%commit_message%"
 if "%commit_message%"=="" (
     echo Commit message cannot be empty. Please try again.
     goto end
@@ -37,3 +38,4 @@ git push
 ECHO "GIT PUSHED FRONT END"
 
 :end
+endlocal
