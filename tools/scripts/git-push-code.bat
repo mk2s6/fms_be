@@ -12,8 +12,8 @@ mysqldump -u root -p --databases mk2s_fms  > .\\migrations\\initialize-base-db.s
 ECHO "EXPORT COMPLETE"
 
 :COMMIT
-ECHO "Do you want to push frontend and backend ?"
-ECHO "Please enter A for both, B for only Back-End and F for Front-End only :"
+ECHO Do you want to push frontend and backend ?
+ECHO Please enter A for both, B for only Back-End and F for Front-End only :
 SET /p UIC_REPO_PUSH="A/a = all, B/b = Backend only, F/f = Front-End only :"
 SET /p USER_COMMIT_MESSAGE="What do you want the commit message to be? : "
 
@@ -36,7 +36,7 @@ git add .
 git commit -m "%USER_COMMIT_MESSAGE%"
 git push
 ECHO "GIT PUSHED BACKEND"
-IF /i %UIC_REPO_PUSH% NEQ "A" OR %UIC_REPO_PUSH% NEQ "a" GOTO END
+IF /i %UIC_REPO_PUSH% EQU "b" GOTO ENDING
 
 
 :FE
@@ -47,6 +47,6 @@ git commit -m "%USER_COMMIT_MESSAGE%"
 git push
 ECHO "GIT PUSHED FRONT END"
 
-:END
+:ENDING
 ECHO Completed batch script, ending session;
 endlocal
