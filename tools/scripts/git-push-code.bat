@@ -2,7 +2,7 @@
 setlocal
 
 SET /p UDB = "Do you want to export complete DB? : "
-IF "%UDB%" EQU "y" OR "%UDB%" EQU "Y" GOTO EXPORT_DB
+IF /i "%UDB%" EQU "y" GOTO EXPORT_DB
 GOTO COMMIT
 
 :EXPORT_DB
@@ -19,14 +19,14 @@ SET /p USER_COMMIT_MESSAGE="What do you want the commit message to be? : "
 
 ECHO Committing with message: "%USER_COMMIT_MESSAGE%"
 
-IF "%USER_COMMIT_MESSAGE%" EQU "" (
+IF /i "%USER_COMMIT_MESSAGE%" EQU "" (
     ECHO Commit message cannot be empty. Please try again.
     GOTO COMMIT
 )
 
-IF %UIC_REPO_PUSH% EQU "A" OR %UIC_REPO_PUSH% EQU "a" GOTO ALL
-IF %UIC_REPO_PUSH% EQU "B" OR %UIC_REPO_PUSH% EQU "b" GOTO BE
-IF %UIC_REPO_PUSH% EQU "F" OR %UIC_REPO_PUSH% EQU "f" GOTO FE
+IF /i %UIC_REPO_PUSH% EQU "A" GOTO ALL
+IF /i %UIC_REPO_PUSH% EQU "B" GOTO BE
+IF /i %UIC_REPO_PUSH% EQU "F" GOTO FE
 
 
 :ALL
@@ -36,7 +36,7 @@ git add .
 git commit -m "%USER_COMMIT_MESSAGE%"
 git push
 ECHO "GIT PUSHED BACKEND"
-IF %UIC_REPO_PUSH% NEQ "A" OR %UIC_REPO_PUSH% NEQ "a" GOTO END
+IF /i %UIC_REPO_PUSH% NEQ "A" OR %UIC_REPO_PUSH% NEQ "a" GOTO END
 
 
 :FE
