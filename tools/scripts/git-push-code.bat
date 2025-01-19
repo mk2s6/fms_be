@@ -1,9 +1,8 @@
 @ECHO OFF
 setlocal
 
-SET /p UDB = "Do you want to export complete DB? : "
-IF /i "%UDB%" EQU "y" GOTO EXPORT_DB
-ELSE GOTO COMMIT
+SET /p UI_DB_EXPORT="Do you want to export complete DB? : "
+IF /i "%UI_DB_EXPORT%" NEQ "y" GOTO COMMIT
 
 :EXPORT_DB
 ECHO "EXPORT DATABASE"
