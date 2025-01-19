@@ -51,9 +51,9 @@ SET /P UI_DEPLOY="Do you want to deploy, Please provide y for Yes? "
 IF /I "%UI_DEPLOY%" NEQ "y" GOTO ENDING
 
 SET /P UI_RDB="Do you want to recreate DB, Please provide y for Yes? "
-ssh mk2s.ovh "cd /var/app/fms_be/tools/scripts/deployments && bash ./deploy.sh << END_INPUT
+ssh mk2s.ovh "cd /var/app/fms_be/tools/scripts/deployments && bash ./deploy.sh << EOF
 %UI_RDB%
-END_INPUT"
+EOF"
 
 ECHO Completed batch script, ending session;
 endlocal
