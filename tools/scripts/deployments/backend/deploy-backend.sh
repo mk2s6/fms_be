@@ -8,11 +8,17 @@ git pull
 git stash pop
 echo "Pulling code from GIT Successful..."
 
+echo "Do you want to Recreate-DB, If yes please give Y/y else please provide any key? - "
+read -p "" recreate
+recreate=${recreate:-$1}
+recreate=$(echo "$recreate" | tr -d '\n')
+recreate=$(echo "$recreate" | tr -d '\r')
 
-read -p "Do you want to Recreate-DB, If yes please give Y/y else please provide any key? - " recreate
+echo Recreate options : "$recreate"
+echo "Recreate options (debug):"
+echo "$recreate" | od -c
 
-if [ "$recreate" = "Y" ] || [ "$recreate" = "y" ]
-then
+if [[ "$recreate" =~ ^[Yy] ]]; then
     echo "Recreating database started"
     cd /var/app/fms_be/tools/scripts/deployments/backend
     bash drop-and-create-db.sh
@@ -31,5 +37,5 @@ echo "Running Migrations successful..."
 
 echo "Restarting server..."
 npm i --production
-pm2 start ~/pm2.config.js
+
 echo "Server restarted..."
