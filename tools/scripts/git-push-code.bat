@@ -3,7 +3,7 @@ setlocal
 
 SET /p UDB = "Do you want to export complete DB? : "
 IF /i "%UDB%" EQU "y" GOTO EXPORT_DB
-GOTO COMMIT
+ELSE GOTO COMMIT
 
 :EXPORT_DB
 ECHO "EXPORT DATABASE"
@@ -46,6 +46,11 @@ git add .
 git commit -m "%USER_COMMIT_MESSAGE%"
 git push
 ECHO "GIT PUSHED FRONT END"
+
+SET /p UI_DEPLOY="Do you want to deploy, Please provide y for Yes? "
+IF /i "%UI_DEPLOY%" NEQ "y" GOTO ENDING
+
+ssh mk2s.ovh "cd /var/app/fms_be/tools/scripts/deployments && bash ./deploy.sh"
 
 :ENDING
 ECHO Completed batch script, ending session;
