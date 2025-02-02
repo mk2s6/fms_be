@@ -149,6 +149,7 @@ if (config.get('environment') === 'test') {
 }
 
 app.use((err, _req, res, next) => {
+  console.log(err);
   if (err instanceof RG.APIError) {
     return RG.sendErrorResponse(res)(err);
   }

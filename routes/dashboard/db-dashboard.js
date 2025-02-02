@@ -16,7 +16,8 @@ async function transactionSummaryMonthly(log, user, filters) {
         SUM(CASE WHEN trans_type = 'DEBIT' THEN trans_value ELSE 0 END) AS debits
       FROM transactions
       where trans_user_id = ? AND trans_made_on >= DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL ? MONTH), '%Y-%m-01') AND trans_is_deleted = 0
-      GROUP BY 1;
+      GROUP BY 1
+      ORDER BY month ASC;
     `,
     [user.id, months || 0],
   );

@@ -48,7 +48,7 @@ router.post('', passwordValidations, async (req, res) => {
       const rowCheck = errList.dbError.ERR_RESTAURANT_EMPLOYEE_SET_PIN_FATAL_AFFECTED_ROWS_0;
       return res.status(500).send(rowCheck);
     }
-    return res.status(200).send(RG.success('User LOCK PIN set', 'User LOCK PIN set successfully', []));
+    return res.status(200).send(RG.success('User password update', 'User password updated successfully', []));
   } catch (e) {
     log.error(routeName(e.message), { error: e.stack });
     const exceptionErr = RG.internalError(errList.internalError.ERR_EMPLOYEE_UPDATE_PASSWORD_NO_UPDATE_NO_EXCEPTION);

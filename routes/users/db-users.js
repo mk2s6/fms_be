@@ -72,14 +72,14 @@ const registerUser = async (log, pool, user) => {
   return pool.execute(sqlQuery, sqlParams);
 };
 
-const setUserPassword = async (log, pool, { id, resId }, password) => {
+const setUserPassword = async (log, pool, { id }, password) => {
   log.info({ msg: functionName('setUserPassword') });
-  return pool.execute('UPDATE users SET user_password = ? WHERE user_id = ? AND user_res_id = ?;', [password, id, resId]);
+  return pool.execute('UPDATE users SET user_password = ? WHERE user_id = ?;', [password, id]);
 };
 
-const validateUserPin = async (log, pool, { id, resId }) => {
+const validateUserPin = async (log, pool, { id }) => {
   log.info({ msg: functionName('validateUserPin') });
-  return pool.execute('SELECT user_lock_pin AS PIN FROM users WHERE user_id = ? AND user_res_id = ?;', [id, resId]);
+  return pool.execute('SELECT user_lock_pin AS PIN FROM users WHERE user_id = ?;', [id]);
 };
 
 const setUserUsername = async (log, pool, { id }, { username }) => {

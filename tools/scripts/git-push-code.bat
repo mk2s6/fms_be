@@ -1,12 +1,11 @@
 @ECHO OFF
 @REM setlocal
-
+cd ..\\..\\
 SET /P UI_DB_EXPORT="Do you want to export complete DB? : "
 IF /I "%UI_DB_EXPORT%" NEQ "y" GOTO COMMIT
 
 :EXPORT_DB
 ECHO "EXPORT DATABASE"
-cd ..\\..\\
 mysqldump -u root -p --databases mk2s_fms  > .\\migrations\\initialize-base-db.sql
 ECHO "EXPORT COMPLETE"
 

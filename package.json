@@ -4,7 +4,7 @@
   "private": true,
   "main": "bin/www",
   "scripts": {
-    "start": "npm run docs & nodemon ./bin/www",
+    "start": "nodemon ./bin/www",
     "devStart": "set DEBUG=barebone-node-project:* & npm run docs & nodemon ./bin/www",
     "test": "jest --detectOpenHandles --runInBand ./tests",
     "verboseTest": "jest --detectOpenHandles --verbose true --runInBand ./tests",
