@@ -1,5 +1,5 @@
 @ECHO OFF
-setlocal
+@REM setlocal
 
 SET /P UI_DB_EXPORT="Do you want to export complete DB? : "
 IF /I "%UI_DB_EXPORT%" NEQ "y" GOTO COMMIT
